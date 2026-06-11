@@ -1,0 +1,8 @@
+dev\smorki\foliaredstonelimiter\scheduler\TickCounterManager.class
+dev\smorki\foliaredstonelimiter\util\MessageUtil.class
+dev\smorki\foliaredstonelimiter\listener\RedstoneListener.class
+dev\smorki\foliaredstonelimiter\FoliaRedstoneLimiter.class
+dev\smorki\foliaredstonelimiter\scheduler\RegionFreezeManager.class
+dev\smorki\foliaredstonelimiter\config\ConfigManager.class
+dev\smorki\foliaredstonelimiter\command\FRLCommand.class
+dev\smorki\foliaredstonelimiter\util\ChunkKey.class

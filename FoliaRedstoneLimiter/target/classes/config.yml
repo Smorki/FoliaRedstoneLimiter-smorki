@@ -1,0 +1,42 @@
+# ╔══════════════════════════════════════════════════════╗
+# ║         FoliaRedstoneLimiter - Configuration         ║
+# ║                  Made by Smorki                      ║
+# ╚══════════════════════════════════════════════════════╝
+
+# Maximum number of redstone updates allowed per chunk per tick.
+# Chunks exceeding this threshold will be frozen temporarily.
+# Recommended: 500 | Range: 50 - 5000
+max-redstone-updates-per-tick: 500
+
+# How long (in seconds) a violating chunk's redstone will be suppressed.
+# During this window, all redstone events in that chunk are silently cancelled.
+# Recommended: 30 | Range: 5 - 300
+freeze-duration-seconds: 30
+
+# Worlds where the limiter will NOT be active.
+# Useful for creative/dev worlds where redstone testing is expected.
+bypass-worlds:
+  - creative_world
+  - dev_world
+
+# ── Message Templates ──────────────────────────────────
+# Supports MiniMessage format and legacy hex (#RRGGBB).
+# Available placeholders:
+#   {world}   - world name
+#   {chunk_x} - chunk X coordinate
+#   {chunk_z} - chunk Z coordinate
+#   {count}   - detected update count
+#   {limit}   - configured limit
+#   {seconds} - freeze duration
+messages:
+  # Broadcast to all online operators when a chunk is frozen
+  freeze-alert: "<#8E44AD>[FRL] <#00FFFF>Redstone flood detected! <white>World: <#00FFFF>{world} <white>| Chunk: <#00FFFF>[{chunk_x}, {chunk_z}] <white>| Updates: <#00FFFF>{count}<white>/<#8E44AD>{limit} <white>| Frozen: <#00FFFF>{seconds}s"
+
+  # Sent to admins who run /frl reload
+  reload-success: "<#8E44AD>[FRL] <#00FFFF>Configuration reloaded successfully."
+
+  # Sent to non-admins trying to use /frl
+  no-permission: "<#8E44AD>[FRL] <white>You do not have permission to use this command."
+
+  # Sent when /frl is used with an unknown sub-command
+  unknown-command: "<#8E44AD>[FRL] <white>Usage: <#00FFFF>/frl reload"
