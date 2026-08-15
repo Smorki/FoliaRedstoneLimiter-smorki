@@ -4,6 +4,7 @@ import dev.smorki.foliaredstonelimiter.FoliaRedstoneLimiter;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -27,6 +28,9 @@ public class ConfigManager {
     // AtomicInteger gives lock-free reads from any region thread.
     private final AtomicInteger maxUpdatesPerTick = new AtomicInteger(500);
     private final AtomicInteger freezeDurationSeconds = new AtomicInteger(30);
+
+    // Whether ConfigWatcher should apply on-disk changes automatically.
+    private final AtomicBoolean autoReloadEnabled = new AtomicBoolean(true);
 
     // AtomicReference ensures the list reference is published as a whole;
     // individual region threads will never see a half-constructed list.
@@ -57,6 +61,7 @@ public class ConfigManager {
 
         maxUpdatesPerTick.set(cfg.getInt("max-redstone-updates-per-tick", 500));
         freezeDurationSeconds.set(cfg.getInt("freeze-duration-seconds", 30));
+        autoReloadEnabled.set(cfg.getBoolean("auto-reload", true));
         bypassWorlds.set(List.copyOf(cfg.getStringList("bypass-worlds")));
 
         msgFreezeAlert.set(cfg.getString("messages.freeze-alert", ""));
@@ -69,6 +74,7 @@ public class ConfigManager {
 
     public int getMaxUpdatesPerTick()     { return maxUpdatesPerTick.get(); }
     public int getFreezeDurationSeconds() { return freezeDurationSeconds.get(); }
+    public boolean isAutoReloadEnabled()  { return autoReloadEnabled.get(); }
     public List<String> getBypassWorlds() { return bypassWorlds.get(); }
 
     public String getMsgFreezeAlert()   { return msgFreezeAlert.get(); }

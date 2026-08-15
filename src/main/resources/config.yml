@@ -13,6 +13,11 @@ max-redstone-updates-per-tick: 500
 # Recommended: 30 | Range: 5 - 300
 freeze-duration-seconds: 30
 
+# Automatically reload this file when it is changed on disk.
+# Checked every 2 seconds; changes apply without /frl reload or a restart.
+# Set to false to require manual reloads only.
+auto-reload: true
+
 # Worlds where the limiter will NOT be active.
 # Useful for creative/dev worlds where redstone testing is expected.
 bypass-worlds:
