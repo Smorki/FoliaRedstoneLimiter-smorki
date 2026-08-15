@@ -2,6 +2,7 @@ package dev.smorki.foliaredstonelimiter;
 
 import dev.smorki.foliaredstonelimiter.command.FRLCommand;
 import dev.smorki.foliaredstonelimiter.config.ConfigManager;
+import dev.smorki.foliaredstonelimiter.config.ConfigWatcher;
 import dev.smorki.foliaredstonelimiter.listener.RedstoneListener;
 import dev.smorki.foliaredstonelimiter.scheduler.RegionFreezeManager;
 import dev.smorki.foliaredstonelimiter.scheduler.TickCounterManager;
@@ -39,6 +40,7 @@ public final class FoliaRedstoneLimiter extends JavaPlugin {
     private static final String TARGET_FOLIA_VERSION = "1.21.11";
 
     private ConfigManager     configManager;
+    private ConfigWatcher       configWatcher;
     private RegionFreezeManager freezeManager;
     private TickCounterManager  counterManager;
 
@@ -62,6 +64,10 @@ public final class FoliaRedstoneLimiter extends JavaPlugin {
         //    executes on a pooled async thread — I/O never touches a region thread.
         Bukkit.getAsyncScheduler().runNow(this, task -> configManager.reload());
 
+        // ── 3b. Watch config.yml for on-disk changes → auto reload ────────
+        configWatcher = new ConfigWatcher(this);
+        configWatcher.start();
+
         // ── 4. Register event listener ────────────────────────────────────
         getServer().getPluginManager().registerEvents(
                 new RedstoneListener(this, freezeManager, counterManager), this);
@@ -80,7 +86,9 @@ public final class FoliaRedstoneLimiter extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Clear in-memory state so a /reload doesn't carry stale frozen chunks.
+        // Stop the config watcher and clear in-memory state so a /reload
+        // doesn't carry stale frozen chunks.
+        if (configWatcher  != null) configWatcher.stop();
         if (freezeManager  != null) freezeManager.clearAll();
         if (counterManager != null) counterManager.clearAll();
 
